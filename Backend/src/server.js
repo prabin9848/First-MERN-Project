@@ -1,12 +1,29 @@
 import express from "express"
 import notesRoutes from "./Routes/notesRoutes.js";
-// const express = require('express') if type in package.json is common
+import { connectDB } from "./config/db.js";
+import dotenv from "dotenv"
+import dns from 'dns';
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
+dotenv.config({ path: './src/.env' });
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
+connectDB();
+
+//middleware
+app.use(express.json());//thsi middleware will parse JSON bodies: req.body
+app.use(rateLimiter)
+
+// our simple custom middleware
+// app.use((req,res,next)=>{
+//     console.log(`Req methos is ${req.method} & Req URL is ${req.url}`)
+//     next();
+// })
 
 app.use("/api/notes", notesRoutes)
 
-app.listen(3000, () => {
-    console.log("Server is running on port 3000")
+app.listen(PORT, () => {
+    console.log("Server is running on port: ", PORT)
 })
