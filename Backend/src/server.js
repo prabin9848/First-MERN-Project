@@ -1,20 +1,19 @@
-import express from "express"
+import express from "express";
 import notesRoutes from "./Routes/notesRoutes.js";
 import { connectDB } from "./config/db.js";
-import dotenv from "dotenv"
-import dns from 'dns';
-dns.setServers(['8.8.8.8', '8.8.4.4']);
+import dotenv from "dotenv";
+import rateLimiter from "./middleware/ratelimiter.js";
+import dns from "dns";
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
-dotenv.config({ path: './src/.env' });
+dotenv.config({ path: "./src/.env" });
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-connectDB();
-
 //middleware
-app.use(express.json());//thsi middleware will parse JSON bodies: req.body
-app.use(rateLimiter)
+app.use(express.json()); //thsi middleware will parse JSON bodies: req.body
+app.use(rateLimiter);
 
 // our simple custom middleware
 // app.use((req,res,next)=>{
@@ -22,8 +21,10 @@ app.use(rateLimiter)
 //     next();
 // })
 
-app.use("/api/notes", notesRoutes)
+app.use("/api/notes", notesRoutes);
 
-app.listen(PORT, () => {
-    console.log("Server is running on port: ", PORT)
-})
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log("Server is running on port: ", PORT);
+  });
+});

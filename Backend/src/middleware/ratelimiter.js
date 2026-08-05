@@ -1,15 +1,15 @@
-import ratelimit from "../config/upstash";
+import ratelimit from "../config/upstash.js";
 
-const rateLimiter = async (requestAnimationFrame, resizeBy, next)=>{
+const rateLimiter = async (req, res, next)=>{
     try{
-        const{success} = await ratelimit.limit("my-limit-key")
+        const{success} = await ratelimit.limit("my-rate-limit")
 
         if (!success) {
             return res.status(429).json({
                 message: "Too many requests, please tru again later",
             });
         }
-        
+        next()
     } catch(error){
         console.log("Rate limit error", error);
         next(error);

@@ -1,12 +1,12 @@
-import { Ratelimit } from "@upstash/ratelimit"
-import { Redis } from "@upstash/redis";
-
 import dotenv from "dotenv";
 
-//create a ratelimiter that allows 10 requests prr 20 sec
-const ratelimit = new  Ratelimit({
-    redits: Redis.fromEnv(),
-    limiter: Ratelimit.slidingWindow(10, "20 s"),
-})
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+dotenv.config({ path: "./src/.env" });
+
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(100, "60 s"),
+});
 
 export default ratelimit;
