@@ -1,7 +1,9 @@
 import express from "express";
+import cors from "cors"
+import dotenv from "dotenv";
+
 import notesRoutes from "./Routes/notesRoutes.js";
 import { connectDB } from "./config/db.js";
-import dotenv from "dotenv";
 import rateLimiter from "./middleware/ratelimiter.js";
 import dns from "dns";
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
@@ -12,6 +14,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 //middleware
+app.use(cors());{
+  origin: "http://localhost:5173/"
+}
 app.use(express.json()); //thsi middleware will parse JSON bodies: req.body
 app.use(rateLimiter);
 
