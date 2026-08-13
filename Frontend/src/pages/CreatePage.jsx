@@ -1,8 +1,8 @@
 import { ArrowLeftIcon } from 'lucide-react';
 import React, { useState } from 'react'
+import api from "../lib/axios.js"
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from "react-router"
-import axios from 'axios';
 
 
 const CreatePage = () => {
@@ -21,7 +21,7 @@ const CreatePage = () => {
 
     setLoading(true)
     try {
-       await axios.post("http://localhost:3000/api/notes", {
+       await api.post("/notes", {
         title,
         content
        })
@@ -37,7 +37,10 @@ const CreatePage = () => {
       }else{
         toast.error("Failed to create note");
       }
-    }
+      } finally{
+        setLoading(false)
+      }
+    
   }
 
   return (
@@ -57,7 +60,7 @@ const CreatePage = () => {
                   <label className='label'>
                     <span className='label-text'>Title</span>
                   </label>
-                  <input type="text"
+                  <textarea type="text"
                   placeholder='Note Title'
                   className='input input-bordered'
                   value={title}
