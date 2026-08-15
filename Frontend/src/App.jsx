@@ -16,6 +16,7 @@ const App = () => {
         <Route path ="/note/:id" element={<NoteDetail />}></Route>
       </Routes>
     </div>
+    
   )
 }
 
