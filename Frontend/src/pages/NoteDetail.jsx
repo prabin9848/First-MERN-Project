@@ -41,14 +41,20 @@ const NoteDetail = () => {
     }
   };
   const handleSave = async() => {
-    if(!note.title)
+    if(!note.title.trim() || !note.content.trim()){
+      toast.error("Please add a title or content");
+      return;
+    }
+    setSaving(true)
     try {
-      await api.post(`/notes/${id}`)
-      toast.success("Note saved");
+      await api.put(`/notes/${id}`, note)
+      toast.success("Note saved successfully");
       navigate("/")  
     } catch (error) {
       console.log("Error saving the note: ",error)
       toast.error("Failed to save the note")
+    } finally{
+      setSaving(false)
     }
   };
   console.log(note);
